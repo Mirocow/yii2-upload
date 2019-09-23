@@ -7,4 +7,4 @@
                     'form' => $form,
                     'name' => 'AdsPhoto[photo][]',
                 ]) ?>
-```# yii2-upload
+```
