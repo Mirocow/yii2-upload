@@ -1,0 +1,211 @@
+* { box-sizing: border-box; }
+template { display: none; /* IE support */}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.playground {
+  background: #eee;
+  padding: 4rem 4rem;
+}
+
+/** clear floating **/
+.playground::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.card {
+  display: inline-block;
+  float: left; /** optional, better alignment for multi-row use cases -> or use flexbox */
+  background: #fff;
+  width: 250px;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,.15), 0 0 4px 0 rgba(0,0,0,.2), 0 12px 12px 0 rgba(0,0,0,.15);
+  margin: 0.5rem 1rem;
+  transition: box-shadow .2s ease-in-out;
+  z-index: 100;
+}
+
+.card[draggable=true] {
+  cursor: move;
+}
+
+.card[draggable=false] {
+  cursor: not-allowed;
+}
+
+/* Prevent the text contents of draggable elements from being selectable. Also from Elements which are explicit not draggable */
+.playground {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.card:hover {
+  box-shadow: 0 0 18px 0 rgba(0,0,0,.1), 0 0 36px 0 rgba(0,0,0,.15), 0 36px 36px 0 rgba(0,0,0,.2);
+}
+
+.card > img { padding: 0; margin: 0; object-fit: contain; max-width: 100%; }
+.card-text { padding: 0.75rem; background: #eee; display: flex; justify-content: flex-end;}
+.card-text button {
+    margin-left: 10px;
+    border: 1px solid;
+    border-radius: 3px;
+    padding-right: 10px;
+    background: none;
+}
+.card-text i {
+    margin: 0 2px 0 0;
+}
+.card-text > h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color .2s ease-in-out;
+}
+.card-text > h3:hover { color: green; }
+.card-text > span {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1rem;
+  font-weight: 200;
+}
+
+.card-placeholder {position: fixed; display: inline-block; background: #ddd; }
+.card.moving { box-shadow: 0 0 2px 0 rgba(0,0,0,0), 0 0 4px 0 rgba(0,0,0,0), 0 12px 12px 0 rgba(0,0,0,0); }
+
+.card-head{
+  background: #eee;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-family: Menlo, "Courier New";
+  position: relative;
+}
+
+.author {
+  position: absolute;
+  display: inline-block;
+  right: 1rem;
+  bottom: -25px;
+  border-radius: 50px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 2px 16px;
+  color: white;
+}
+
+/* Modal Body */
+.modal-body {}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 16px;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+
+.image-manager-container {
+  position: relative;
+}
+
+.add-more-image {
+  width: 250px;
+  height: 250px;
+  color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 70px;
+  cursor: pointer;
+}
+
+.file-input-upload {
+    margin: 10px 0;
+    padding: 2px 10px;
+    border: 1px solid;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+label[for="file-input"] input {
+    display: none
+}
+
+.file-upload .modal-body {
+    padding: 0;
+}
+
+#cropImage {
+    background: none;
+    border: 2px solid #505458;
+    border-radius: 3px;
+    color: #505458;
+    line-height: 30px;
+}

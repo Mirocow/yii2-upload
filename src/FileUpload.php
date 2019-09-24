@@ -1,8 +1,7 @@
 <?php
 
-namespace backend\widgets;
+namespace mirocow\upload;
 
-use backend\assets\FileUploadAsset;
 use yii\base\Widget;
 
 /**
