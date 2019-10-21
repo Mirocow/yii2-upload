@@ -23,9 +23,6 @@ $("#<?= $form->id?>").submit(function(e){
         processData: false,
         contentType: false,
         type: 'POST',
-        success: function(data){
-          alert(data);
-        }
       });
 });
 
