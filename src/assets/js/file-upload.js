@@ -307,14 +307,14 @@ const cropper = () => {
     modalBody.appendChild(image);
 
     const contentType = imageBase64.split(';')[0].split(":")[1];
-    const { url, data } = fileList[imageIndex]
-    console.log(fileList[imageIndex])
-    const fileSize = url ? await getFileSize(url) : calculateImageSize(data)
+    const { url, data } = fileList[imageIndex];
+    const fileSize = url ? await getFileSize(url) : calculateImageSize(data);
+    const fileUrl = url ? `<a href="${url}" target="_blank">${url}</a>` : 'Not loaded yet';
 
     const modalInfo = modal.querySelector(".modal-info")
     modalInfo.innerHTML = `
       <ul class="modal-list">
-        <li><b>Url:</b> ${fileList[imageIndex].url || 'Not loaded yet'}</li>
+        <li><b>Url:</b> ${fileUrl}</li>
         <li><b>Type:</b> ${contentType}</li>
         <li><b>Size:</b> ${(fileSize / 1024).toFixed(1)} kb</li>
       </ul>
