@@ -274,6 +274,17 @@ function getFileSize (url) {
   })
 }
 
+function calculateImageSize (base64String){
+  let padding, inBytes, base64StringLength;
+  if(base64String.endsWith("==")) padding = 2;
+  else if (base64String.endsWith("=")) padding = 1;
+  else padding = 0;
+
+  base64StringLength = base64String.length;
+  inBytes =(base64StringLength / 4 ) * 3 - padding;
+  return inBytes;
+}
+
 const cropper = () => {
   const modal = document.getElementById("cropperModal");
   const closeSpan = document.getElementsByClassName("close")[0];
@@ -296,14 +307,16 @@ const cropper = () => {
     modalBody.appendChild(image);
 
     const contentType = imageBase64.split(';')[0].split(":")[1];
-    const fileSize = await getFileSize(fileList[imageIndex].url)
+    const { url, data } = fileList[imageIndex]
+    console.log(fileList[imageIndex])
+    const fileSize = url ? await getFileSize(url) : calculateImageSize(data)
 
     const modalInfo = modal.querySelector(".modal-info")
     modalInfo.innerHTML = `
       <ul class="modal-list">
-        <li>${fileList[imageIndex].url}</li>
-        <li>${contentType}</li>
-        <li>${(fileSize / 1024).toFixed(1)} kb</li>
+        <li><b>Url:</b> ${fileList[imageIndex].url || 'Not loaded yet'}</li>
+        <li><b>Type:</b> ${contentType}</li>
+        <li><b>Size:</b> ${(fileSize / 1024).toFixed(1)} kb</li>
       </ul>
     `;
 
