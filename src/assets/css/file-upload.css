@@ -138,7 +138,6 @@ body {
 /* Modal Header */
 .modal-header {
   padding: 2px 16px;
-  color: white;
 }
 
 /* Modal Body */
@@ -147,9 +146,19 @@ body {
 /* Modal Footer */
 .modal-footer {
   padding: 16px;
-  color: white;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.modal-info {
+  width: 100%;
+}
+
+.modal-list {
+  text-align: left;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* Modal Content */

@@ -1,12 +1,3 @@
-if (!String.prototype.format) {
-  String.prototype.format = function() {
-    const args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] !== "undefined" ? args[number] : match;
-    });
-  };
-}
-
 function closest(el, clazz, stopClazz) {
   if (el.classList.contains(stopClazz)) return null;
 
@@ -61,12 +52,19 @@ function toDataUrl(url) {
   });
 }
 
+function getPreviewTemplate () {
+  const previewTemplateNode = document.querySelector('#card-template');
+  return previewTemplateNode.innerHTML
+}
+
 function previewFiles() {
   const preview = document.querySelector("#preview");
   const inputsContainer = document.querySelector("#inputsContainer");
   const nameTemplate = document
     .querySelector(".image-manager-container")
     .getAttribute("data-input-template");
+
+  if (!previewTemplate) previewTemplate = getPreviewTemplate()
 
   preview.innerHTML = '<div class="card-placeholder tpl-placeholder"></div>';
   inputsContainer.innerHTML = "";
@@ -75,22 +73,11 @@ function previewFiles() {
   let inputsHTML = "";
 
   fileList.forEach((file, index) => {
-    previewHTML += `
-        <div class="card" draggable="true" data-index="${index}" >
-            <img width="250" height="250" src="${file.data}" draggable="false" data-filename="${file.filename}"/>
-            
-            <div class="card-text">
-                <button class="image-edit-button" type="button">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                    Edit
-                </button>
-                <button class="image-delete-button" type="button">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                    Delete
-                </button>
-            </div>
-        </div>
-    `;
+    previewHTML += previewTemplate
+      .slice() // To not mutate original template
+      .replace('{index}', index)
+      .replace('{data}', file.data)
+      .replace('{filename}', file.filename);
   });
 
   preview.insertAdjacentHTML("beforeend", previewHTML);
@@ -216,6 +203,7 @@ const input = element => {
         fileNameList.push(fileName);
         return {
           filename: fileName,
+          url,
           data
         };
       })
@@ -270,13 +258,40 @@ const input = element => {
   element.addEventListener("change", async event => handleFiles(element.files));
 };
 
+function getFileSize (url) {
+  return new Promise(resolve => {
+    const http = new XMLHttpRequest();
+    http.open('HEAD', url, true); // true = Asynchronous
+    http.onreadystatechange = function() {
+      if (this.readyState == this.DONE) {
+        if (this.status === 200) {
+          const fileSize = this.getResponseHeader('content-length');
+          resolve(fileSize)
+        }
+      }
+    };
+    http.send();
+  })
+}
+
+function calculateImageSize (base64String){
+  let padding, inBytes, base64StringLength;
+  if(base64String.endsWith("==")) padding = 2;
+  else if (base64String.endsWith("=")) padding = 1;
+  else padding = 0;
+
+  base64StringLength = base64String.length;
+  inBytes =(base64StringLength / 4 ) * 3 - padding;
+  return inBytes;
+}
+
 const cropper = () => {
   const modal = document.getElementById("cropperModal");
   const closeSpan = document.getElementsByClassName("close")[0];
   const applyButton = document.querySelector("#cropImage");
   let currentIndex = null;
 
-  const showCropper = function(imageBase64, imageIndex) {
+  const showCropper = async function(imageBase64, imageIndex) {
     if (!imageBase64) {
       console.error("Cannot show cropper without image data");
       return;
@@ -290,6 +305,20 @@ const cropper = () => {
     const modalBody = modal.querySelector(".modal-body");
     modalBody.innerHTML = "";
     modalBody.appendChild(image);
+
+    const contentType = imageBase64.split(';')[0].split(":")[1];
+    const { url, data } = fileList[imageIndex];
+    const fileSize = url ? await getFileSize(url) : calculateImageSize(data);
+    const fileUrl = url ? `<a href="${url}" target="_blank">${url}</a>` : 'Not loaded yet';
+
+    const modalInfo = modal.querySelector(".modal-info")
+    modalInfo.innerHTML = `
+      <ul class="modal-list">
+        <li><b>Url:</b> ${fileUrl}</li>
+        <li><b>Type:</b> ${contentType}</li>
+        <li><b>Size:</b> ${(fileSize / 1024).toFixed(1)} kb</li>
+      </ul>
+    `;
 
     const rootElement = document.querySelector(".image-manager-container");
     const cropConfigurations = JSON.parse(rootElement.getAttribute("data-crop-configurations"));
@@ -331,6 +360,7 @@ let fileNameList = [];
 let fileList = [];
 let originalFileList = [];
 let cropperInstance;
+let previewTemplate;
 
 dnd(document.querySelector(".playground"));
 input(document.querySelector("#file-input"));

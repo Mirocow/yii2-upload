@@ -30,6 +30,7 @@ $this->registerJs($js, yii\web\View::POS_READY);
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
+                <div class="modal-info"></div>
                 <button id="cropImage">Сохранить</button>
             </div>
         </div>
@@ -45,4 +46,21 @@ $this->registerJs($js, yii\web\View::POS_READY);
 
     <div id="inputsContainer" class="inputs-container">
     </div>
+
+    <template id="card-template">
+        <div class="card" draggable="true" data-index="{index}">
+            <img width="250" height="250" src="{data}" draggable="false" data-filename="{filename}"/>
+
+            <div class="card-text">
+                <button class="image-edit-button" type="button">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    Edit
+                </button>
+                <button class="image-delete-button" type="button">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </template>
 </div>
