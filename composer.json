@@ -7,7 +7,7 @@
     "issues": "https://github.com/mirocow/yii2-upload",
     "source": "https://github.com/mirocow/yii2-upload"
   },
-  "minimum-stability": "beta",
+  "minimum-stability": "0.1-beta",
   "require": {
     "php": ">=5.4.0",
     "yiisoft/yii2": ">=2.0"
