@@ -19,6 +19,8 @@ class FileUpload extends Widget
 
     public $name;
 
+    public $captions = false;
+
     public $crop_configurations = [
         'viewMode' => 0,
         'aspectRatio' => null,
@@ -34,6 +36,7 @@ class FileUpload extends Widget
             'files' => $this->files,
             'form' => $this->form,
             'name' => $this->name,
+            'captions' => $this->captions,
             'crop_configurations' => $this->crop_configurations,
         ]);
     }

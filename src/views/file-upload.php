@@ -14,6 +14,7 @@ $this->registerJs($js, yii\web\View::POS_READY);
     <div
         class="image-manager-container"
         data-images='<?= json_encode($files); ?>'
+        data-captions='<?= json_encode( $captions ) ?>'
         data-input-template="<?= $name?>"
         data-crop-configurations='<?= json_encode($crop_configurations)?>'
     >
@@ -50,7 +51,9 @@ $this->registerJs($js, yii\web\View::POS_READY);
     <template id="card-template">
         <div class="card" draggable="true" data-index="{index}">
             <img width="250" height="250" src="{data}" draggable="false" data-filename="{filename}"/>
-
+            <?php if ($captions) : ?>
+                <input type="text" name="captions[{filename}]" value="{caption}" class="caption">
+            <?php endif; ?>
             <div class="card-text">
                 <button class="image-edit-button" type="button">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
