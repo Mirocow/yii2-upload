@@ -218,3 +218,7 @@ label[for="file-input"] input {
     color: #505458;
     line-height: 30px;
 }
+
+.caption {
+  width: 100%;
+}

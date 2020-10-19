@@ -73,11 +73,13 @@ function previewFiles() {
   let inputsHTML = "";
 
   fileList.forEach((file, index) => {
+    if ( !file.caption ) file.caption = '';
     previewHTML += previewTemplate
       .slice() // To not mutate original template
       .replace('{index}', index)
       .replace('{data}', file.data)
-      .replace('{filename}', file.filename);
+      .replace('{caption}',file.caption)
+      .replaceAll('{filename}', file.filename);
   });
 
   preview.insertAdjacentHTML("beforeend", previewHTML);
@@ -194,15 +196,18 @@ const dnd = (element, options) => {
 const input = element => {
   const container = document.querySelector(".image-manager-container");
   const initialImages = JSON.parse(container.getAttribute("data-images"));
-
+  const captions = container.getAttribute("data-captions") ? JSON.parse(container.getAttribute("data-captions")) : false;
+   
   const handleFilesFromAttribute = async () => {
     originalFileList = await Promise.all(
-      initialImages.map(async url => {
+      initialImages.map(async function(url, index) {
         const data = await toDataUrl(url);
         let fileName = url.split("/").slice(-1)[0];
         fileNameList.push(fileName);
+        caption = captions ? captions[index] : '';
         return {
           filename: fileName,
+          caption: caption,
           url,
           data
         };
