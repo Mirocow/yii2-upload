@@ -31,7 +31,7 @@ $this->registerJs($js, yii\web\View::POS_READY);
             <div class="modal-body"></div>
             <div class="modal-footer">
                 <div class="modal-info"></div>
-                <button id="cropImage">Сохранить</button>
+                <button id="cropImage" type="button">Сохранить</button>
             </div>
         </div>
     </div>
